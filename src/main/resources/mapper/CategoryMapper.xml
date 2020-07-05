@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="test.dao.CategoryMapper">
+
+    <insert id="addBcategory" parameterType="bcategory" useGeneratedKeys="true" keyProperty="id">
+        insert into testmybatis.Bcategory
+        (bname)
+        values
+        (#{bname})
+    </insert>
+
+    
+    <sql id="find-Bcategory">
+        <if test="id!=null">
+            id=#{id}
+        </if>
+        <if test="bname!=null">
+            and bname=#{bname}
+        </if>
+    </sql>
+    <resultMap id="BcategoryMap" type="bcategory">
+        <id property="id" column="id"/>
+        <result property="bname" column="bname"/>
+    </resultMap>
+    <resultMap id="BcategoryScategoryMap" type="bcategory" extends="BcategoryMap">
+        <collection property="scategories" ofType="scategory">
+            <id property="id" column="id"/>
+            <result property="sname" column="sname"/>
+        </collection>
+    </resultMap>
+    
+    <select id="getBcategories" parameterType="map" resultMap="BcategoryMap">
+        select * from testmybatis.Bcategory
+        <where>
+            <include refid="find-Bcategory"></include>
+        </where>
+    </select>
+    <select id="getBcategoriesWithScategory" parameterType="map" resultMap="BcategoryScategoryMap">
+        select
+        b.id,b.bname,s.id,s.sname
+        from
+        testmybatis.Bcategory b,testmybatis.Scategory s
+        <where>
+           <include refid="find-Bcategory"></include>
+            and s.bid=b.id
+        </where>
+    </select>
+
+    <insert id="addScategory" parameterType="scategory" useGeneratedKeys="true" keyProperty="id">
+        insert into testmybatis.Scategory
+        (sname, bid)
+        values
+        (#{sname},#{bid})
+    </insert>
+
+    <select id="getScategories" parameterType="map" resultType="scategory">
+        select * from Scategory
+        <where>
+            <if test="id!=null">
+                id=#{id}
+            </if>
+            <if test="sname!=null">
+                and sname=#{sname}
+            </if>
+            <if test="bid!=null">
+                and bid=#{bid}
+            </if>
+        </where>
+    </select>
+</mapper>

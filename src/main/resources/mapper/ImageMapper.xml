@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="test.dao.ImageMapper">
+    <select id="findSwiperImage" parameterType="map" resultType="swiperimage">
+        select * from testmybatis.swiperimage
+        <where>
+            <if test="id!=null">
+                id=#{id}
+            </if>
+            <if test="url!=null">
+                and url=#{url}
+            </if>
+        </where>
+    </select>
+    <select id="findFloorImage" parameterType="map" resultType="floorimage">
+        select * from testmybatis.floorimage
+        <where>
+            <if test="id!=null">
+                id=#{id}
+            </if>
+            <if test="finame!=null">
+                and finame=#{finame}
+            </if>
+            <if test="url!=null">
+                and url=#{url}
+            </if>
+        </where>
+    </select>
+    <select id="findCategoryImage" parameterType="map" resultType="categoryimage">
+        select * from testmybatis.categoryimage
+        <where>
+            <if test="id!=null">
+                id=#{id}
+            </if>
+            <if test="ciname">
+                and ciname=#{ciname}
+            </if>
+            <if test="url!=null">
+                and url=#{url}
+            </if>
+        </where>
+    </select>
+
+    <insert id="addSwiperImage" parameterType="swiperimage" useGeneratedKeys="true" keyProperty="id">
+        insert into testmybatis.swiperimage
+        (url)
+        values
+        (#{url})
+    </insert>
+    <insert id="addFloorImage" parameterType="floorimage" useGeneratedKeys="true" keyProperty="id">
+        insert into testmybatis.floorimage
+        (finame, url)
+        values
+        (#{finame}, #{url})
+    </insert>
+    <insert id="addCategoryImage" parameterType="categoryimage" useGeneratedKeys="true" keyProperty="id">
+        insert into testmybatis.categoryimage
+        (ciname, url)
+        values
+        (#{ciname}, #{url})
+    </insert>
+</mapper>

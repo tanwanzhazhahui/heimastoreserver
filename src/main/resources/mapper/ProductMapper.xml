@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="test.dao.ProductMapper">
+
+    <sql id="find-product">
+        <if test="id!=null">
+            id=#{id}
+        </if>
+        <if test="productname!=null">
+            and productname=#{productname}
+        </if>
+        <if test="start_id!=null and end_id!=null">
+            and id>=#{start_id} and #{end_id}>=id
+        </if>
+    </sql>
+    <select id="findProduct" parameterType="map" resultType="product">
+        select * from testmybatis.product
+        <where>
+            <include refid="find-product"></include>
+        </where>
+    </select>
+
+    <select id="findProductLike" parameterType="string" resultType="product">
+        select * from testmybatis.product where productname like concat('%',#{name},'%')
+    </select>
+
+    <sql id="update-product">
+        <if test="productname!=null">
+            productname=#{productname},
+        </if>
+        <if test="url!=null">
+            url=#{url},
+        </if>
+        <if test="price!=null">
+            price=#{price},
+        </if>
+        <if test="detail!=null">
+            detail=#{detail},
+        </if>
+    </sql>
+    <update id="updateProduct" parameterType="product">
+        update testmybatis.product
+        <set>
+            <include refid="update-product"></include>
+        </set>
+        where id=#{id}
+    </update>
+    <insert id="addProduct" parameterType="product" useGeneratedKeys="true" keyProperty="id">
+        insert into testmybatis.product
+        (productname, url, price, detail)
+        values
+        (#{productname}, #{url}, #{price}, #{detail})
+    </insert>
+</mapper>
